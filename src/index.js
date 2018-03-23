@@ -11,7 +11,7 @@ const styles = {
 const App = () => (
   <div style={styles}>
     <Hello name="CodeSandbox" />
-    <h2>Start editing to see some magic happen {"\u2728"}</h2>
+    <h2>2048 {"\u2728"}</h2>
     <Layout />
   </div>
 );

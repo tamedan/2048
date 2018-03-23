@@ -1,8 +1,10 @@
 import React, { Component } from "react";
+import autoBind from "react-autobind";
 
 export default class Layout extends Component {
   constructor(props) {
     super(props);
+    autoBind(this);
     this.state = {};
   }
 
@@ -75,22 +77,97 @@ export default class Layout extends Component {
     }
   }
 
-  goLeft() {
-    let plane = this.state.plane;
+  goLeft(plane) {
     for (let i = 0; i < 4; i++) {
-      if (plane[i][0] === plane[i][1]) {
-        plane[i][0] = plane[i][0] + plane[i][1];
-      }
-      if (plane[i][1] === plane[i][2]) {
-        plane[i][1] = plane[i][1] + plane[i][2];
-      }
-      if (plane[i][2] === plane[i][3]) {
-        plane[i][2] = plane[i][2] + plane[i][3];
+      let w = 0;
+      while (w < 4) {
+        let n = 0;
+        while (n < 4) {
+          if (plane[i][w] == null) {
+            plane[i] = plane[i].concat(plane[i].splice(w, 1));
+          }
+          n++;
+        }
+        w++;
       }
     }
+    for (let i = 0; i < 4; i++) {
+      if (plane[i][0] === plane[i][1] && plane[i][0]) {
+        plane[i][0] = plane[i][0] + plane[i][1];
+        plane[i][1] = null;
+      }
+      if (plane[i][1] === plane[i][2] && plane[i][1]) {
+        if (plane[i][0]) {
+          plane[i][1] = plane[i][1] + plane[i][2];
+          plane[i][2] = null;
+        } else {
+          plane[i][0] = plane[i][1] + plane[i][2];
+          plane[i][1] = plane[i][2] = null;
+        }
+      }
+      if (plane[i][2] === plane[i][3] && plane[i][2]) {
+        if (plane[i][1]) {
+          plane[i][2] = plane[i][2] + plane[i][3];
+          plane[i][3] = null;
+        } else {
+          plane[i][1] = plane[i][2] + plane[i][3];
+          plane[i][2] = plane[i][3] = null;
+        }
+      }
+    }
+    console.log("@@@@@@@@@@@ plane goLeft:", plane);
     this.setState({
       plane
     });
+    this.initPlane(plane);
+  }
+
+  goRight(plane) {
+    for (let i = 0; i < 4; i++) {
+      let w = 3;
+      while (w >= 0) {
+        let n = 0;
+        while (n < 4) {
+          if (plane[i][w] == null) {
+            plane[i].splice(w, 1);
+            // plane[i] = plane[i].concat(sp);
+            plane[i].unshift(null);
+          }
+          n++;
+        }
+        w--;
+      }
+    }
+
+    for (let i = 0; i < 4; i++) {
+      if (plane[i][0] === plane[i][1] && plane[i][1]) {
+        if (plane[i][2]) {
+          plane[i][1] = plane[i][0] + plane[i][1];
+          plane[i][0] = null;
+        } else {
+          plane[i][2] = plane[i][0] + plane[i][1];
+          plane[i][1] = plane[i][0] = null;
+        }
+      }
+      if (plane[i][1] === plane[i][2] && plane[i][2]) {
+        if (plane[i][3]) {
+          plane[i][2] = plane[i][1] + plane[i][2];
+          plane[i][1] = null;
+        } else {
+          plane[i][3] = plane[i][1] + plane[i][2];
+          plane[i][1] = plane[i][2] = null;
+        }
+      }
+      if (plane[i][2] === plane[i][3] && plane[i][3]) {
+        plane[i][3] = plane[i][2] + plane[i][3];
+        plane[i][2] = null;
+      }
+    }
+
+    this.setState({
+      plane
+    });
+    this.initPlane(plane);
   }
 
   render() {
@@ -123,7 +200,20 @@ export default class Layout extends Component {
         </button>
         <div className="remote_button">
           <div>
-            <button onClick={this.goLeft}>&lt;</button>
+            <button
+              onClick={() => {
+                this.goLeft(plane);
+              }}
+            >
+              &lt;
+            </button>
+            <button
+              onClick={() => {
+                this.goRight(plane);
+              }}
+            >
+              &gt;
+            </button>
           </div>
         </div>
       </div>
