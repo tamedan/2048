@@ -173,10 +173,17 @@ export default class Layout extends Component {
 
   goTop(plane) {
     let newArr = [];
-    for (let r = 0; r < 4; r++) {
-      newArr[r].push(plane[r][0]);
-      console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!! newArr: ", newArr);
+    for (let nr = 0; nr < 4; nr++) {
+      for (let r = 0; r < 4; r++) {
+        console.log("$$$$$$$$$$$ newArr: ", newArr);
+        if (!newArr[nr]) {
+          newArr[nr] = [];
+        }
+        newArr[nr][newArr[nr].length] = plane[r][nr];
+        console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!! newArr: ", newArr);
+      }
     }
+    this.goLeft(newArr);
   }
 
   render() {
