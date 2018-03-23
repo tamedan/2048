@@ -78,6 +78,19 @@ export default class Layout extends Component {
     }
   }
 
+  movePlane(plane, move) {
+    let newPlane;
+    if (move === "left") {
+      newPlane = this.goLeft(plane);
+    }
+    if (move === "right") {
+      newPlane = this.goRight(plane);
+    }
+    if (move === "top") {
+      newPlane = this.goTop(plane);
+    }
+    this.setState({ plane: newPlane });
+  }
   goLeft(plane) {
     for (let i = 0; i < 4; i++) {
       let w = 0;
@@ -117,10 +130,8 @@ export default class Layout extends Component {
       }
     }
     console.log("@@@@@@@@@@@ plane goLeft:", plane);
-    this.setState({
-      plane
-    });
     this.initPlane(plane);
+    return plane;
   }
 
   goRight(plane) {
@@ -164,11 +175,8 @@ export default class Layout extends Component {
         plane[i][2] = null;
       }
     }
-
-    this.setState({
-      plane
-    });
     this.initPlane(plane);
+    return plane;
   }
 
   goTop(plane) {
@@ -183,7 +191,19 @@ export default class Layout extends Component {
         console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!! newArr: ", newArr);
       }
     }
-    this.goLeft(newArr);
+    plane = this.goLeft(newArr);
+    let backArr = [];
+    for (let nr = 0; nr < 4; nr++) {
+      for (let r = 0; r < 4; r++) {
+        console.log("$$$$$$$$$$$ newArr: ", newArr);
+        if (!backArr[r]) {
+          backArr[r] = [];
+        }
+        backArr[r][backArr[nr].length] = plane[r][nr];
+        console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!! backArr: ", backArr);
+      }
+    }
+    return backArr;
   }
 
   render() {
