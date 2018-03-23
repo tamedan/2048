@@ -55,24 +55,25 @@ export default class Layout extends Component {
     randCol = Math.floor(randCol);
     position[0] = randRow;
     position[1] = randCol;
+
     return position;
   }
 
   initPlane(plane) {
     let randNumber = this.initNumber();
 
-    let position = this.state.position;
+    let position = this.initRC();
+    if (plane[position[0]][position[1]] !== null) {
+      while (plane[position[0]][position[1]] !== null) {
+        position = this.initRC();
+      }
+    }
 
-    if (plane[position[0]][position[1]] == null) {
+    if (plane[position[0]][position[1]] === null) {
       plane[position[0]][position[1]] = randNumber;
       console.log("############# rand: ", plane);
       this.setState({
         plane
-      });
-    } else {
-      let position = this.initRC();
-      this.setState({
-        position
       });
     }
   }
@@ -170,6 +171,14 @@ export default class Layout extends Component {
     this.initPlane(plane);
   }
 
+  goTop(plane) {
+    let newArr = [];
+    for (let r = 0; r < 4; r++) {
+      newArr[r].push(plane[r][0]);
+      console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!! newArr: ", newArr);
+    }
+  }
+
   render() {
     let plane = this.state.plane;
     let position = this.state.position;
@@ -213,6 +222,13 @@ export default class Layout extends Component {
               }}
             >
               &gt;
+            </button>
+            <button
+              onClick={() => {
+                this.goTop(plane);
+              }}
+            >
+              ^
             </button>
           </div>
         </div>
