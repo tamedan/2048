@@ -228,7 +228,11 @@ export default class Layout extends Component {
               return (
                 <div className={"layout_row row_" + i}>
                   {obj.map(function(cell, index) {
-                    return <div className={"col col_" + index}>{cell}</div>;
+                    return (
+                      <div className={"col col_" + index + " s_" + cell}>
+                        {cell}
+                      </div>
+                    );
                   })}
                 </div>
               );
