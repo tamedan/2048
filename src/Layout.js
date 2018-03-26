@@ -56,6 +56,21 @@ export default class Layout extends Component {
   }
 
   initPlane(plane) {
+    let inn = 0;
+    for (let i = 0; i < 4; i++) {
+      plane[i].indexOf(null);
+      console.log(
+        "@@@@@@@@@@@@ plane[i].indexOf(null)",
+        plane[i].indexOf(null)
+      );
+      if (plane[i].indexOf(null) < 0) {
+        inn++;
+        if (4 <= inn) {
+          alert("!!!!!!!!!!!!!");
+          return;
+        }
+      }
+    }
     let randNumber = this.initNumber();
     let position = this.initRC();
     if (plane[position[0]][position[1]] !== null) {
