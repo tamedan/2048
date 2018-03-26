@@ -78,134 +78,145 @@ export default class Layout extends Component {
     }
   }
 
-  movePlane(plane, move) {
-    let newPlane;
-    if (move === "left") {
-      newPlane = this.goLeft(plane);
-    }
-    if (move === "right") {
-      newPlane = this.goRight(plane);
-    }
-    if (move === "top") {
-      newPlane = this.goTop(plane);
-    }
-    this.setState({ plane: newPlane });
-  }
   goLeft(plane) {
-    for (let i = 0; i < 4; i++) {
-      let w = 0;
-      while (w < 4) {
-        let n = 0;
-        while (n < 4) {
-          if (plane[i][w] == null) {
-            plane[i] = plane[i].concat(plane[i].splice(w, 1));
-          }
-          n++;
-        }
-        w++;
-      }
-    }
-    for (let i = 0; i < 4; i++) {
-      if (plane[i][0] === plane[i][1] && plane[i][0]) {
-        plane[i][0] = plane[i][0] + plane[i][1];
-        plane[i][1] = null;
-      }
-      if (plane[i][1] === plane[i][2] && plane[i][1]) {
-        if (plane[i][0]) {
-          plane[i][1] = plane[i][1] + plane[i][2];
-          plane[i][2] = null;
-        } else {
-          plane[i][0] = plane[i][1] + plane[i][2];
-          plane[i][1] = plane[i][2] = null;
-        }
-      }
-      if (plane[i][2] === plane[i][3] && plane[i][2]) {
-        if (plane[i][1]) {
-          plane[i][2] = plane[i][2] + plane[i][3];
-          plane[i][3] = null;
-        } else {
-          plane[i][1] = plane[i][2] + plane[i][3];
-          plane[i][2] = plane[i][3] = null;
-        }
-      }
-    }
-    console.log("@@@@@@@@@@@ plane goLeft:", plane);
+    this.moveToLeft(plane);
+    this.addToLeft(plane);
+    this.moveToLeft(plane);
     this.initPlane(plane);
+    return plane;
+  }
+  moveToLeft(plane) {
+    for (let row = 3; 0 <= row; row--) {
+      for (let col = 3; 0 <= col; col--) {
+        if (plane[row][col] !== null) {
+          if (plane[row][col - 1] === null) {
+            plane[row][col - 1] = plane[row][col];
+            plane[row][col] = null;
+            if (plane[row][col - 1] === 0) {
+              plane[row][col - 1] = null;
+            }
+          }
+        }
+      }
+    }
+    return plane;
+  }
+  addToLeft(plane) {
+    for (let row = 0; row < 4; row++) {
+      for (let col = 0; col < 4; col++) {
+        if (plane[row][col] !== null) {
+          if (plane[row][col - 1] && plane[row][col] === plane[row][col - 1]) {
+            plane[row][col - 1] = plane[row][col] + plane[row][col - 1];
+            plane[row][col] = null;
+          }
+        }
+      }
+    }
     return plane;
   }
 
   goRight(plane) {
-    for (let i = 0; i < 4; i++) {
-      let w = 3;
-      while (w >= 0) {
-        let n = 0;
-        while (n < 4) {
-          if (plane[i][w] == null) {
-            plane[i].splice(w, 1);
-            // plane[i] = plane[i].concat(sp);
-            plane[i].unshift(null);
-          }
-          n++;
-        }
-        w--;
-      }
-    }
-
-    for (let i = 0; i < 4; i++) {
-      if (plane[i][0] === plane[i][1] && plane[i][1]) {
-        if (plane[i][2]) {
-          plane[i][1] = plane[i][0] + plane[i][1];
-          plane[i][0] = null;
-        } else {
-          plane[i][2] = plane[i][0] + plane[i][1];
-          plane[i][1] = plane[i][0] = null;
-        }
-      }
-      if (plane[i][1] === plane[i][2] && plane[i][2]) {
-        if (plane[i][3]) {
-          plane[i][2] = plane[i][1] + plane[i][2];
-          plane[i][1] = null;
-        } else {
-          plane[i][3] = plane[i][1] + plane[i][2];
-          plane[i][1] = plane[i][2] = null;
-        }
-      }
-      if (plane[i][2] === plane[i][3] && plane[i][3]) {
-        plane[i][3] = plane[i][2] + plane[i][3];
-        plane[i][2] = null;
-      }
-    }
+    this.moveToRight(plane);
+    this.addToRight(plane);
+    this.moveToRight(plane);
     this.initPlane(plane);
     return plane;
   }
-
-  goTop(plane) {
-    let newArr = [];
-    for (let nr = 0; nr < 4; nr++) {
-      for (let r = 0; r < 4; r++) {
-        console.log("$$$$$$$$$$$ newArr: ", newArr);
-        if (!newArr[nr]) {
-          newArr[nr] = [];
+  moveToRight(plane) {
+    for (let row = 0; 4 > row; row++) {
+      for (let col = 0; 4 > col; col++) {
+        if (plane[row][col] !== null) {
+          if (plane[row][col + 1] === null) {
+            plane[row][col + 1] = plane[row][col];
+            plane[row][col] = null;
+          }
         }
-        newArr[nr][newArr[nr].length] = plane[r][nr];
-        console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!! newArr: ", newArr);
       }
     }
-    plane = this.goLeft(newArr);
-    let backArr = [];
-    for (let nr = 0; nr < 4; nr++) {
-      for (let r = 0; r < 4; r++) {
-        console.log("$$$$$$$$$$$ newArr: ", newArr);
-        if (!backArr[r]) {
-          backArr[r] = [];
-        }
-        backArr[r][backArr[nr].length] = plane[r][nr];
-        console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!! backArr: ", backArr);
-      }
-    }
-    return backArr;
+    return plane;
   }
-
+  addToRight(plane) {
+    for (let row = 0; row < 4; row++) {
+      for (let col = 0; col < 4; col++) {
+        if (plane[row][col] !== null) {
+          if (plane[row][col + 1] && plane[row][col] === plane[row][col + 1]) {
+            plane[row][col + 1] = plane[row][col] + plane[row][col + 1];
+            plane[row][col] = null;
+          }
+        }
+      }
+    }
+    return plane;
+  }
+  goTop(plane) {
+    this.moveToTop(plane);
+    this.addToTop(plane);
+    this.moveToTop(plane);
+    this.initPlane(plane);
+    return plane;
+  }
+  moveToTop(plane) {
+    for (let row = 3; 0 < row; row--) {
+      for (let col = 3; 0 <= col; col--) {
+        if (plane[row][col] !== null) {
+          if (plane[row - 1][col] === null) {
+            plane[row - 1][col] = plane[row][col];
+            plane[row][col] = null;
+            if (plane[row - 1][col] === 0) {
+              plane[row - 1][col] = null;
+            }
+          }
+        }
+      }
+    }
+    return plane;
+  }
+  addToTop(plane) {
+    for (let row = 0; row < 4; row++) {
+      for (let col = 0; col < 4; col++) {
+        if (plane[row][col] !== null) {
+          if (plane[row - 1] && plane[row][col] === plane[row - 1][col]) {
+            plane[row - 1][col] = plane[row][col] + plane[row - 1][col];
+            plane[row][col] = null;
+          }
+        }
+      }
+    }
+    return plane;
+  }
+  goDown(plane) {
+    this.moveToDown(plane);
+    this.addToDown(plane);
+    this.moveToDown(plane);
+    this.initPlane(plane);
+    return plane;
+  }
+  moveToDown(plane) {
+    for (let row = 0; 4 > row; row++) {
+      for (let col = 3; 0 <= col; col--) {
+        if (plane[row][col] !== null) {
+          if (plane[row + 1] && plane[row + 1][col] === null) {
+            plane[row + 1][col] = plane[row][col];
+            plane[row][col] = null;
+          }
+        }
+      }
+    }
+    return plane;
+  }
+  addToDown(plane) {
+    for (let row = 3; 0 <= row; row--) {
+      for (let col = 0; col < 4; col++) {
+        if (plane[row][col] !== null) {
+          if (plane[row + 1] && plane[row][col] === plane[row + 1][col]) {
+            plane[row + 1][col] = plane[row][col] + plane[row + 1][col];
+            plane[row][col] = null;
+          }
+        }
+      }
+    }
+    return plane;
+  }
   render() {
     let plane = this.state.plane;
     let position = this.state.position;
@@ -241,21 +252,28 @@ export default class Layout extends Component {
                 this.goLeft(plane);
               }}
             >
-              &lt;
+              &#8672;
             </button>
             <button
               onClick={() => {
                 this.goRight(plane);
               }}
             >
-              &gt;
+              &#8674;
             </button>
             <button
               onClick={() => {
                 this.goTop(plane);
               }}
             >
-              ^
+              &#8673;
+            </button>
+            <button
+              onClick={() => {
+                this.goDown(plane);
+              }}
+            >
+              &#8675;
             </button>
           </div>
         </div>
