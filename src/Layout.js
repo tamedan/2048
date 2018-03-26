@@ -216,6 +216,7 @@ export default class Layout extends Component {
     }
     return plane;
   }
+
   render() {
     let plane = this.state.plane;
     let position = this.state.position;
