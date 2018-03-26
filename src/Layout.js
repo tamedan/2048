@@ -223,7 +223,7 @@ export default class Layout extends Component {
     return (
       <div className="layout">
         <div className="container">
-          <div className="row">
+          <div className="row row_l">
             {plane.map(function(obj, i) {
               return (
                 <div className={"layout_row row_" + i}>
