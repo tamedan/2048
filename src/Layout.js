@@ -18,7 +18,6 @@ export default class Layout extends Component {
       }
     }
     let position = this.initRC();
-    console.log("$$$$$$$$$$$$$$$$$$$$$$$$ : ", plane);
     this.setState({
       plane,
       position
@@ -32,8 +31,6 @@ export default class Layout extends Component {
         row.push(`<div class='col-md-3 " + plane[r][c] + "'></div>`);
       }
     }
-    // console.log('row: ',row);
-
     return row;
   }
   initNumber() {
@@ -44,7 +41,6 @@ export default class Layout extends Component {
     } else if (randNumber === 1) {
       randNumber = 4;
     }
-    console.log(randNumber);
     return randNumber;
   }
   initRC() {
@@ -61,17 +57,14 @@ export default class Layout extends Component {
 
   initPlane(plane) {
     let randNumber = this.initNumber();
-
     let position = this.initRC();
     if (plane[position[0]][position[1]] !== null) {
       while (plane[position[0]][position[1]] !== null) {
         position = this.initRC();
       }
     }
-
     if (plane[position[0]][position[1]] === null) {
       plane[position[0]][position[1]] = randNumber;
-      console.log("############# rand: ", plane);
       this.setState({
         plane
       });
@@ -80,7 +73,9 @@ export default class Layout extends Component {
 
   goLeft(plane) {
     this.moveToLeft(plane);
+    this.moveToLeft(plane);
     this.addToLeft(plane);
+    this.moveToLeft(plane);
     this.moveToLeft(plane);
     this.initPlane(plane);
     return plane;
@@ -117,7 +112,9 @@ export default class Layout extends Component {
 
   goRight(plane) {
     this.moveToRight(plane);
+    this.moveToRight(plane);
     this.addToRight(plane);
+    this.moveToRight(plane);
     this.moveToRight(plane);
     this.initPlane(plane);
     return plane;
@@ -137,11 +134,11 @@ export default class Layout extends Component {
   }
   addToRight(plane) {
     for (let row = 0; row < 4; row++) {
-      for (let col = 0; col < 4; col++) {
+      for (let col = 3; 0 <= col; col--) {
         if (plane[row][col] !== null) {
-          if (plane[row][col + 1] && plane[row][col] === plane[row][col + 1]) {
-            plane[row][col + 1] = plane[row][col] + plane[row][col + 1];
-            plane[row][col] = null;
+          if (plane[row][col - 1] && plane[row][col] === plane[row][col - 1]) {
+            plane[row][col] = plane[row][col] + plane[row][col - 1];
+            plane[row][col - 1] = null;
           }
         }
       }
@@ -150,21 +147,21 @@ export default class Layout extends Component {
   }
   goTop(plane) {
     this.moveToTop(plane);
+    this.moveToTop(plane);
+    console.log("@plane: ", plane);
     this.addToTop(plane);
+    this.moveToTop(plane);
     this.moveToTop(plane);
     this.initPlane(plane);
     return plane;
   }
   moveToTop(plane) {
-    for (let row = 3; 0 < row; row--) {
+    for (let row = 3; 0 <= row; row--) {
       for (let col = 3; 0 <= col; col--) {
         if (plane[row][col] !== null) {
-          if (plane[row - 1][col] === null) {
+          if (plane[row - 1] && plane[row - 1][col] === null) {
             plane[row - 1][col] = plane[row][col];
             plane[row][col] = null;
-            if (plane[row - 1][col] === 0) {
-              plane[row - 1][col] = null;
-            }
           }
         }
       }
@@ -186,7 +183,9 @@ export default class Layout extends Component {
   }
   goDown(plane) {
     this.moveToDown(plane);
+    this.moveToDown(plane);
     this.addToDown(plane);
+    this.moveToDown(plane);
     this.moveToDown(plane);
     this.initPlane(plane);
     return plane;
@@ -208,9 +207,9 @@ export default class Layout extends Component {
     for (let row = 3; 0 <= row; row--) {
       for (let col = 0; col < 4; col++) {
         if (plane[row][col] !== null) {
-          if (plane[row + 1] && plane[row][col] === plane[row + 1][col]) {
-            plane[row + 1][col] = plane[row][col] + plane[row + 1][col];
-            plane[row][col] = null;
+          if (plane[row - 1] && plane[row][col] === plane[row - 1][col]) {
+            plane[row][col] = plane[row][col] + plane[row - 1][col];
+            plane[row - 1][col] = null;
           }
         }
       }
@@ -220,9 +219,7 @@ export default class Layout extends Component {
   render() {
     let plane = this.state.plane;
     let position = this.state.position;
-    // let plane = this.renderLayout();
-    console.log("plane: ", plane);
-    console.log("position: ", position);
+
     return (
       <div className="layout">
         <div className="container">
