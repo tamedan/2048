@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import autoBind from "react-autobind";
 import { Swipeable } from "react-touch";
+import { isMobile } from "react-device-detect";
 import { styles } from "/src/styles/styles";
 import injectSheet from "react-jss";
 
@@ -239,6 +240,9 @@ export default class Layout extends Component {
   render() {
     let plane = this.state.plane;
     let position = this.state.position;
+    const option = {
+      ismobile: isMobile ? true : false
+    };
     const { classes } = this.props;
     return (
       <Swipeable
@@ -276,6 +280,7 @@ export default class Layout extends Component {
           <div className="remote_button">
             <div>
               <button
+                hidden={option.ismobile}
                 onClick={() => {
                   this.goLeft(plane);
                 }}
@@ -283,6 +288,7 @@ export default class Layout extends Component {
                 &#8672;
               </button>
               <button
+                hidden={option.ismobile}
                 onClick={() => {
                   this.goRight(plane);
                 }}
@@ -290,6 +296,7 @@ export default class Layout extends Component {
                 &#8674;
               </button>
               <button
+                hidden={option.ismobile}
                 onClick={() => {
                   this.goTop(plane);
                 }}
@@ -297,6 +304,7 @@ export default class Layout extends Component {
                 &#8673;
               </button>
               <button
+                hidden={option.ismobile}
                 onClick={() => {
                   this.goDown(plane);
                 }}
