@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import autoBind from "react-autobind";
+import { Swipeable } from "react-touch";
 import { styles } from "/src/styles/styles";
 import injectSheet from "react-jss";
 
@@ -240,65 +241,72 @@ export default class Layout extends Component {
     let position = this.state.position;
     const { classes } = this.props;
     return (
-      <div className="layout">
-        <div className="container">
-          <div className="row row_l">
-            {plane.map(function(obj, i) {
-              return (
-                <div className={"layout_row row_" + i}>
-                  {obj.map(function(cell, index) {
-                    return (
-                      <div className={"col col_" + index + " s_" + cell}>
-                        {cell}
-                      </div>
-                    );
-                  })}
-                </div>
-              );
-            })}
+      <Swipeable
+        onSwipeLeft={() => this.goLeft(plane)}
+        onSwipeRight={() => this.goRight(plane)}
+        onSwipeUp={() => this.goTop(plane)}
+        onSwipeDown={() => this.goDown(plane)}
+      >
+        <div className="layout">
+          <div className="container">
+            <div className="row row_l">
+              {plane.map(function(obj, i) {
+                return (
+                  <div className={"layout_row row_" + i}>
+                    {obj.map(function(cell, index) {
+                      return (
+                        <div className={"col col_" + index + " s_" + cell}>
+                          {cell}
+                        </div>
+                      );
+                    })}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+          <button
+            className={classes.button}
+            onClick={() => {
+              this.initPlane(plane);
+            }}
+          >
+            start
+          </button>
+          <div className="remote_button">
+            <div>
+              <button
+                onClick={() => {
+                  this.goLeft(plane);
+                }}
+              >
+                &#8672;
+              </button>
+              <button
+                onClick={() => {
+                  this.goRight(plane);
+                }}
+              >
+                &#8674;
+              </button>
+              <button
+                onClick={() => {
+                  this.goTop(plane);
+                }}
+              >
+                &#8673;
+              </button>
+              <button
+                onClick={() => {
+                  this.goDown(plane);
+                }}
+              >
+                &#8675;
+              </button>
+            </div>
           </div>
         </div>
-        <button
-          className={classes.button}
-          onClick={() => {
-            this.initPlane(plane);
-          }}
-        >
-          start
-        </button>
-        <div className="remote_button">
-          <div>
-            <button
-              onClick={() => {
-                this.goLeft(plane);
-              }}
-            >
-              &#8672;
-            </button>
-            <button
-              onClick={() => {
-                this.goRight(plane);
-              }}
-            >
-              &#8674;
-            </button>
-            <button
-              onClick={() => {
-                this.goTop(plane);
-              }}
-            >
-              &#8673;
-            </button>
-            <button
-              onClick={() => {
-                this.goDown(plane);
-              }}
-            >
-              &#8675;
-            </button>
-          </div>
-        </div>
-      </div>
+      </Swipeable>
     );
   }
 }

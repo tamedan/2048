@@ -9,7 +9,6 @@ const styles = {
 
 const App = () => (
   <div style={styles}>
-    <h2>2048 {"\u2728"}</h2>
     <Layout />
   </div>
 );
