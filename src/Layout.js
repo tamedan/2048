@@ -168,7 +168,6 @@ export default class Layout extends Component {
   goTop(plane) {
     this.moveToTop(plane);
     this.moveToTop(plane);
-    console.log("@plane: ", plane);
     this.addToTop(plane);
     this.moveToTop(plane);
     this.moveToTop(plane);
@@ -244,6 +243,7 @@ export default class Layout extends Component {
       ismobile: isMobile ? true : false
     };
     const { classes } = this.props;
+    console.log(option);
     return (
       <Swipeable
         onSwipeLeft={() => this.goLeft(plane)}
