@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import autoBind from "react-autobind";
+import { styles } from "/src/styles/styles";
+import injectSheet from "react-jss";
 
+@injectSheet(styles)
 export default class Layout extends Component {
   constructor(props) {
     super(props);
@@ -235,7 +238,7 @@ export default class Layout extends Component {
   render() {
     let plane = this.state.plane;
     let position = this.state.position;
-
+    const { classes } = this.props;
     return (
       <div className="layout">
         <div className="container">
@@ -256,6 +259,7 @@ export default class Layout extends Component {
           </div>
         </div>
         <button
+          className={classes.button}
           onClick={() => {
             this.initPlane(plane);
           }}
