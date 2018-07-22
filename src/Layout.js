@@ -23,10 +23,13 @@ export default class Layout extends Component {
       }
     }
     let position = this.initRC();
-    this.setState({
-      plane,
-      position
-    });
+    this.setState(
+      {
+        plane,
+        position
+      },
+      this.initPlane(plane)
+    );
   }
   renderLayout() {
     let plane = this.state.plane;
@@ -239,6 +242,9 @@ export default class Layout extends Component {
   render() {
     let plane = this.state.plane;
     let position = this.state.position;
+    console.log("plane: ", plane);
+    console.log("position: ", position);
+
     const option = {
       ismobile: isMobile ? true : false
     };
@@ -249,8 +255,7 @@ export default class Layout extends Component {
         onSwipeLeft={() => this.goLeft(plane)}
         onSwipeRight={() => this.goRight(plane)}
         onSwipeUp={() => this.goTop(plane)}
-        onSwipeDown={() => this.goDown(plane)}
-      >
+        onSwipeDown={() => this.goDown(plane)}>
         <div className="layout">
           <div className="container">
             <div className="row row_l">
@@ -269,46 +274,34 @@ export default class Layout extends Component {
               })}
             </div>
           </div>
-          <button
-            className={classes.button}
-            onClick={() => {
-              this.initPlane(plane);
-            }}
-          >
-            start
-          </button>
-          <div className="remote_button">
+          <div className={classes.remote_button}>
             <div>
               <button
                 hidden={option.ismobile}
                 onClick={() => {
                   this.goLeft(plane);
-                }}
-              >
+                }}>
                 &#8672;
               </button>
               <button
                 hidden={option.ismobile}
                 onClick={() => {
                   this.goRight(plane);
-                }}
-              >
+                }}>
                 &#8674;
               </button>
               <button
                 hidden={option.ismobile}
                 onClick={() => {
                   this.goTop(plane);
-                }}
-              >
+                }}>
                 &#8673;
               </button>
               <button
                 hidden={option.ismobile}
                 onClick={() => {
                   this.goDown(plane);
-                }}
-              >
+                }}>
                 &#8675;
               </button>
             </div>
